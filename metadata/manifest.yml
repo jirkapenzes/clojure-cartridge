@@ -2,7 +2,7 @@ Name: clojure
 
 Cartridge-Short-Name: CLOJURE
 Cartridge-Version: '0.0.2'
-Cartridge-Vendor: jirkapenzes
+Cartridge-Vendor: dzer6
 
 Display-Name: Clojure (1.7.0)
 Description: "Clojure is a dynamic programming language that targets the Java Virtual Machine (and the CLR, and JavaScript)."
