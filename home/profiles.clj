@@ -1,1 +1,1 @@
-{:user {:local-repo "maven"}}
+{:user {:local-repo "<%= ENV['OPENSHIFT_CLOJURE_DIR'] %>/maven"}}
