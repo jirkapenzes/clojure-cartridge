@@ -1,5 +1,8 @@
 #!/bin/bash
-
+export jdk_archive=jdk-8u45-linux-x64.tar.gz
+export jdk_dir=jdk1.8.0_45
+export JAVA_HOME=${OPENSHIFT_CLOJURE_DIR}/jdk/$jdk_dir
+export PATH=$JAVA_HOME/bin:$PATH
 export LEIN_HOME="${OPENSHIFT_CLOJURE_DIR}/home"
 export M2_REPO="${OPENSHIFT_CLOJURE_DIR}/maven"
 
@@ -8,7 +11,8 @@ export M2_REPO="${OPENSHIFT_CLOJURE_DIR}/maven"
 function start() {
   echo "Starting application"
   cd ${OPENSHIFT_REPO_DIR}
-  nohup ${OPENSHIFT_CLOJURE_DIR}/bin/lein trampoline run > ${OPENSHIFT_CLOJURE_DIR}/log/server.log 2>&1 &
+  ${OPENSHIFT_CLOJURE_DIR}/bin/lein version > ${OPENSHIFT_CLOJURE_DIR}/log/server.log 2>&1
+  nohup ${OPENSHIFT_CLOJURE_DIR}/bin/lein trampoline run >> ${OPENSHIFT_CLOJURE_DIR}/log/server.log 2>&1 &
   echo $! > ${OPENSHIFT_CLOJURE_DIR}/clojure.pid
   return 0
 }

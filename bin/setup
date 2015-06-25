@@ -2,6 +2,39 @@
 
 export LEIN_HOME="${OPENSHIFT_CLOJURE_DIR}/home"
 export M2_REPO="${OPENSHIFT_CLOJURE_DIR}/maven"
+export JAVA_HOME=${OPENSHIFT_CLOJURE_DIR}/jdk/$jdk_dir
+export PATH=$JAVA_HOME/bin:$PATH:/sbin
+export jdk_archive=jdk-8u45-linux-x64.tar.gz
+export jdk_dir=jdk1.8.0_45
+export install_dir=${OPENSHIFT_CLOJURE_DIR}
+
+install_JDK8() {
+  pushd $tmp_dir
+  if [ ! -e "$install_dir/jdk/$jdk_dir/bin/java" ]; then
+    echo "---->Downloading and installing java $jdk_dir"  
+    
+    curl -LO -H "Cookie: oraclelicense=accept-securebackup-cookie"  http://download.oracle.com/otn-pub/java/jdk/8u45-b14/$jdk_archive
+    ls -ltr $install_dir/$tmp_dir/$jdk_archive
+    if [ ! -d "$install_dir/jdk" ]; then
+        mkdir $install_dir/jdk
+      else
+        echo "  --> deleting old jdk versions"
+        rm -rf $install_dir/jdk
+        mkdir $install_dir/jdk
+      fi
+    cd $install_dir/jdk
+    tar xvfz $install_dir/$tmp_dir/$jdk_archive
+    export PATH=$install_dir/jdk/$jdk_dir/bin:$PATH
+    export JAVA_HOME=$install_dir/jdk/$jdk_dir
+  else
+    echo "---->Java $jdk_dir already installed"
+  fi
+  popd
+}
+mkdir -p tmp/build/out
+tmp_dir=tmp/build/out
+install_JDK8
+rm -rf tmp/build
 
 mkdir -p $LEIN_HOME
 mkdir -p $M2_REPO
@@ -9,3 +42,5 @@ mkdir -p $M2_REPO
 wget https://raw.github.com/technomancy/leiningen/stable/bin/lein -O bin/lein
 
 chmod +x bin/lein
+
+bin/lein self-install
